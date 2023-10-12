@@ -6,6 +6,7 @@ import Interfaces.LambdaInterface;
 import Order.Order;
 import Product.Product;
 
+import javax.print.MultiDocPrintService;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -59,7 +60,7 @@ public class Main {
             products.add(prod);
 
             //Se sono alla ventesima iterazione entro in questo if
-           if(i==200){
+           if(i>194){
                //Creo un altro ciclo
                for(int a =0;a<5;a++){
                    //Ad ogni iterazione del ciclo creo un order di tipo Order e lo aggiungo alla lista orders.
@@ -122,7 +123,7 @@ public class Main {
 
 
 
-        moreThan100PriceBooksList = productStream.collect(Collectors.toList());
+        moreThan100PriceBooksList = productStream.toList();
 
         moreThan100PriceBooksList.forEach(product -> {
             System.out.println("Prodotto: " + product.getName() + ", Prezzo: " + product.getPrice());
@@ -132,7 +133,8 @@ public class Main {
         //Ottengo una lista di clienti con solo 2 ties e gli ordini fra le date descritte nella traccia
         List<Product> orderedProducts = orders.stream()
             .filter(order -> order.getCustomer().getTies() == 2)
-            .filter(order -> order.getOrderDate().isAfter(LocalDate.of(2021, 2, 1)) && order.getOrderDate().isBefore(LocalDate.of(2021, 4, 1)))
+            .filter(order -> order.getOrderDate().isAfter(LocalDate.of(2021, 2, 1))
+                && order.getOrderDate().isBefore(LocalDate.of(2021, 4, 1)))
             .flatMap(order -> order.getProducts().stream())
             .toList();
 
@@ -140,6 +142,14 @@ public class Main {
         for (Product product : orderedProducts) {
             System.out.println("Prodotto con customer ties 2 e nel range di date : " + product);
         }
+
+
+        //Esercizio 1 Giovedì
+        //Creo una lambda Expression che dato un user, mi ritorna user e ordini
+
+        Map<String, List<Order>> ordiniPerCliente = orders.stream().collect(Collectors.groupingBy(order -> order.getCustomer().getName()));
+
+        ordiniPerCliente.forEach((customer,ordini)-> System.out.println("Customer: " + customer + " id degli ordini :" + ordini.toString()));
 
     }
 
