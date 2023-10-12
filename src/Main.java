@@ -79,9 +79,48 @@ public class Main {
                    //Assegno un cliente diverso ad ogni ordine dall'array di Customer.
 
                    Customer customer = customers[a];
-                   List<Product> babyProducts = products.stream().filter(isBabies).collect(Collectors.toList());
+                   //creo una Lista di prodotti con categoria BABY uso uno stream() con un filter più una lambda function per ritornare solo i prodotti con categoria BABY
+                   //List<Product> babyProducts = products.stream().filter(isBabies).collect(Collectors.toList());
+                   List<Product> alwaysDifferentProducts =new ArrayList<>();
+                   switch (a){
+                       case 0:
+                           for (int even = 0; even < products.size()-1; even++) {
+                               if (even % 2 == 0) {
+                                   alwaysDifferentProducts.add(products.get(i));
+                               }
+                           }
+                           break;
+                       case 1:
+                           for (int odd = 0; odd < products.size()-1; odd++) {
+                               if (odd % 2 != 0) {
+                                   alwaysDifferentProducts.add(products.get(i));
+                               }
+                           }
+                               break;
+                       case 2:
+                           for (int threeN = 0; threeN < products.size()-1; threeN++) {
+                               if (threeN % 3 != 0) {
+                                   alwaysDifferentProducts.add(products.get(i));
+                               }
+                           }
+                           break;
+                       case 3:
+                           for (int three = 0; three < products.size()-1; three++) {
+                               if (three % 3 == 0) {
+                                   alwaysDifferentProducts.add(products.get(i));
+                               }
+                           }
+                           break;
+                       case 4:
+                           for (int five = 0; five < products.size()-1; five++) {
+                               if (five % 5 == 0) {
+                                   alwaysDifferentProducts.add(products.get(i));
+                               }
+                           }
+                           break;
 
-                   Order order = new Order(state,randomDate,randomDate,babyProducts,customer);
+                   }
+                   Order order = new Order(state,randomDate,randomDate,alwaysDifferentProducts,customer);
                    orders.add(order);
                }
 
@@ -148,8 +187,13 @@ public class Main {
         //Creo una lambda Expression che dato un user, mi ritorna user e ordini
 
         Map<String, List<Order>> ordiniPerCliente = orders.stream().collect(Collectors.groupingBy(order -> order.getCustomer().getName()));
+        Map<Customer, Double> totaleVenditePerCliente;
+
 
         ordiniPerCliente.forEach((customer,ordini)-> System.out.println("Customer: " + customer + " id degli ordini :" + ordini.toString()));
+        ordiniPerCliente.forEach((customer,ordini)-> System.out.println
+            ("Cliente: " + customer + ", Totale vendite: "+ ordini.stream().flatMap(order -> order.getProducts().stream()).mapToDouble(product -> product.getPrice()).sum()));
+
 
     }
 

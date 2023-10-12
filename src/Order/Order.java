@@ -77,7 +77,8 @@ public class Order {
 
     @Override
     public String toString() {
-        return "ID: " + id;
+        return "ID: " + id +
+            ", Products: " + getProducts().toString();
           /*   +", State: " + status +
             ", Order Date: " + orderDate +
             ", Delivery Date: " + deliveryDate +
