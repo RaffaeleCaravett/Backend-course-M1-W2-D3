@@ -187,13 +187,23 @@ public class Main {
         //Creo una lambda Expression che dato un user, mi ritorna user e ordini
 
         Map<String, List<Order>> ordiniPerCliente = orders.stream().collect(Collectors.groupingBy(order -> order.getCustomer().getName()));
-        Map<Customer, Double> totaleVenditePerCliente;
 
+        Map<String, Double> totaleVenditePerCliente = ordiniPerCliente.entrySet()
+            .stream()
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                entry -> entry.getValue()
+                    .stream()
+                    .flatMap(order -> order.getProducts().stream())
+                    .mapToDouble(product -> product.getPrice())
+                    .sum()
+            ));
+        List<Product> listaProdottiDalPiuCostoso = products.stream().sorted(Comparator.comparing(product -> product.getPrice(),Comparator.reverseOrder())).toList();
 
         ordiniPerCliente.forEach((customer,ordini)-> System.out.println("Customer: " + customer + " id degli ordini :" + ordini.toString()));
-        ordiniPerCliente.forEach((customer,ordini)-> System.out.println
-            ("Cliente: " + customer + ", Totale vendite: "+ ordini.stream().flatMap(order -> order.getProducts().stream()).mapToDouble(product -> product.getPrice()).sum()));
-
+        totaleVenditePerCliente.forEach((customer,sommaOrdini)-> System.out.println
+            ("Cliente: " + customer + ", Totale vendite: "+ sommaOrdini));
+        listaProdottiDalPiuCostoso.forEach(product -> System.out.println(product.getPrice()));
 
     }
 
