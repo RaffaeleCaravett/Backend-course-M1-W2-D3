@@ -50,7 +50,7 @@ public class Main {
         customers[4]=customer5;
 
         //Inizio un ciclo for
-        for( int i =0; i<=200;i++){
+        for( int i =0; i<=100;i++){
 
             //Ad ogni iterazione del ciclo creo un prod di tipo Prodotto e lo aggiungo alla lista products.
             double randomDouble = 50 + Math.random() * (150 - 50);
@@ -60,7 +60,7 @@ public class Main {
             products.add(prod);
 
             //Se sono alla ventesima iterazione entro in questo if
-           if(i>194){
+           if(i>94){
                //Creo un altro ciclo
                for(int a =0;a<5;a++){
                    //Ad ogni iterazione del ciclo creo un order di tipo Order e lo aggiungo alla lista orders.
@@ -204,7 +204,11 @@ public class Main {
         totaleVenditePerCliente.forEach((customer,sommaOrdini)-> System.out.println
             ("Cliente: " + customer + ", Totale vendite: "+ sommaOrdini));
         listaProdottiDalPiuCostoso.forEach(product -> System.out.println(product.getPrice()));
-
+        ordiniPerCliente.forEach((customer,media)-> System.out.println
+            ("Cliente: " + customer + ", media ordini : "+ media.stream()
+                .flatMap(order -> order.getProducts().stream())
+                .mapToDouble(product -> product.getPrice())
+                .average()));
     }
 
 
