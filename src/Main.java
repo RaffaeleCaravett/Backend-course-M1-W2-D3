@@ -209,7 +209,22 @@ public class Main {
                 .flatMap(order -> order.getProducts().stream())
                 .mapToDouble(product -> product.getPrice())
                 .average()));
+
+
+        Map<String, Double> sommaPerCategoria = orders.stream()
+            .flatMap(order -> order.getProducts().stream())
+            .collect(Collectors.groupingBy(
+                Product::getCategory,
+                Collectors.summingDouble(Product::getPrice)
+            ));
+
+
+        sommaPerCategoria.forEach((categoria, sommaPrezzo) -> {
+            System.out.println("Categoria: " + categoria + ", Totale: " + sommaPrezzo);
+        });
+
     }
+
 
 
    //Ritorno una data in un range preciso di date passate come parametro
